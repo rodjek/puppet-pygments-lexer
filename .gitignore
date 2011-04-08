@@ -1,0 +1,4 @@
+dist/
+Puppet_Pygments_Lexer.egg-info/
+build/
+*.swp
