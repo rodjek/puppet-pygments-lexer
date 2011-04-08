@@ -20,6 +20,7 @@ class PuppetLexer(RegexLexer):
         'resource': [
             (r'(\s*)(".+?")(:)', bygroups(Text, String, Punctuation), 'instance'),
             (r"(\s*)('.+?')(:)", bygroups(Text, String, Punctuation), 'instance'),
+            (r'(\s*)(\$\S+)(:)', bygroups(Text, Name.Variable, Punctuation), 'instance'),
             (r'(\s*)(\S+?)(:)', bygroups(Text, String, Punctuation), 'instance'),
             (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop'),
         ],
