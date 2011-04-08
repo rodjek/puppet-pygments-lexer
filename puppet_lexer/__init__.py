@@ -1,6 +1,15 @@
 from pygments.lexer import RegexLexer, bygroups, include
 from pygments.token import *
 
+# TODO
+# File { foo => bar }
+# File["bar"] { baz => gronk }
+# class foo inherits baz
+# [Package["foo"], Package["bar"]]
+# class foo($bar) {
+# File["foo"] -> File["bar"] -> File["baz"] <- ~> 
+#
+
 class PuppetLexer(RegexLexer):
     name = 'Puppet'
     aliases = ['puppet']
@@ -32,8 +41,10 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop:2'),
         ],
         'value': [
-            (r"([A-Z].+?)(\[)(\".+\"|'.+')(\])", bygroups(Name.Namespace, Punctuation, String, Punctuation), '#pop'),
+            # TODO: File['arr1', 'arr2'] support
+            (r"([A-Z].+?)(\[)(\".+\"|'.+'|\S+)(\])", bygroups(Name.Namespace, Punctuation, String, Punctuation), '#pop'),
             (r'[0-9]+', Number, '#pop'),
+            (r'\$\S+', Name.Variable, '#pop'),
             (r"[^;,\"'\s]+", String, '#pop'),
             (r'"', String, 'valdblstring'),
             (r"'.+?'", String, '#pop'),
