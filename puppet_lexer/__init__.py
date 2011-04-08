@@ -21,14 +21,12 @@ class PuppetLexer(RegexLexer):
             (r'\}', Punctuation, '#pop'),
         ],
         'instance': [
-            (r"(\s*)(\S+?)(\s*)(=>)(\s*)(\S+)(,)", bygroups(Text, Name.Attribute, Text, Operator, Text, String, Punctuation)),
-            (r"(\s*)(\S+?)(\s*)(=>)(\s*)('.+')(,)", bygroups(Text, Name.Attribute, Text, Operator, Text, String, Punctuation)),
-            (r'(\s*)(\S+?)(\s*)(=>)(\s*)(".+")(,)', bygroups(Text, Name.Attribute, Text, Operator, Text, String, Punctuation)),
-            (r"(\s*)(\S+?)(\s*)(=>)(\s*)(\S+)(;)", bygroups(Text, Name.Attribute, Text, Operator, Text, String, Punctuation), '#pop'),
-            (r"(\s*)(\S+?)(\s*)(=>)(\s*)('.+')(;)", bygroups(Text, Name.Attribute, Text, Operator, Text, String, Punctuation), '#pop'),
-            (r'(\s*)(\S+?)(\s*)(=>)(\s*)(".+")(;)', bygroups(Text, Name.Attribute, Text, Operator, Text, String, Punctuation), '#pop'),
-            (r"(\s*)(\S+?)(\s*)(=>)(\s*)([^;'\"\s]+)", bygroups(Text, Name.Attribute, Text, Operator, Text, String)),
-            (r"(\s*)(\S+?)(\s*)(=>)(\s*)('.*')", bygroups(Text, Name.Attribute, Text, Operator, Text, String)),
-            (r'(\s*)(\S+?)(\s*)(=>)(\s*)(".+")', bygroups(Text, Name.Attribute, Text, Operator, Text, String)),
+            (r"(\s*)(\S+?)(\s*)(=>)(\s*)", bygroups(Text, Name.Attribute, Text, Operator, Text), 'value'),
+        ],
+        'value': [
+            (r'[0-9]+', Number),
+            (r"[^;,\"'\s]+", String),
+            (r'".+"', String),
+            (r"'.+'", String),
         ],
     }
