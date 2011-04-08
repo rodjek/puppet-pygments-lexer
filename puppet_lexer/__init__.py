@@ -12,6 +12,7 @@ class PuppetLexer(RegexLexer):
             (r'(class)(\s*)(.*?)(\s*)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
             (r'(define)(\s*)(.*?)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Punctuation), 'argumentlist'),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
+            (r'(\s*)(\})', bygroups(Text, Punctuation)),
             (r'\s*#.*\n', Comment.Singleline),
             (r'\s*\n', Text),
         ],
