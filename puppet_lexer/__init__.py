@@ -8,11 +8,10 @@ class PuppetLexer(RegexLexer):
 
     tokens = {
         'root': [
+            (r'(\s*)(include)(\s*)(\S+)(\n)', bygroups(Text, Keyword.Namespace, Text, Name.Class, Text)),
             (r'(class)(\s*)(.*?)(\s*)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
             (r'(define)(\s*)(.*?)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Punctuation), 'argumentlist'),
-            (r'(include)(\s*)(\S+)(\n)', bygroups(Keyword.Namespace, Text, Name.Class, Text)),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
-            (r'.*\n', Text),
         ],
         # TODO: test \" in namevar
         'resource': [
