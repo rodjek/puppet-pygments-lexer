@@ -11,6 +11,7 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(include)(\s*)(\S+)(\n)', bygroups(Text, Keyword.Namespace, Text, Name.Class, Text)),
             (r'(class)(\s*)(.*?)(\s*)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
             (r'(define)(\s*)(.*?)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Punctuation), 'argumentlist'),
+            (r'(\s*)(if)(\s*)', bygroups(Text, Keyword, Text), 'if'),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
             (r'(\s*)(\})', bygroups(Text, Punctuation)),
             (r'\s*#.*\n', Comment.Singleline),
@@ -47,5 +48,8 @@ class PuppetLexer(RegexLexer):
             (r'(?:\\(?:[bdefnrstv\'"\\/]|[0-7][0-7]?[0-7]?|\^[a-zA-Z]))', String.Escape),
             (r'[^"\\]+', String),
             (r'"', String, '#pop:2'),
+        ],
+        'if': [
+
         ],
     }
