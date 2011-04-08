@@ -8,11 +8,10 @@ class PuppetLexer(RegexLexer):
 
     tokens = {
         'root': [
-            (r'\s*#.*\n', Comment.Singleline),
             (r'(class)(\s*)(.*?)(\s*)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
             (r'(define)(\s*)(.*?)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Punctuation), 'argumentlist'),
+            (r'(include)(\s*)(\S+)(\n)', bygroups(Keyword.Namespace, Text, Name.Class, Text)),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
-            (r'(include)(\s*)(.*?)(\n)', bygroups(Keyword.Namespace, Text, Name.Class, Text)),
             (r'.*\n', Text),
         ],
         # TODO: test \" in namevar
@@ -26,6 +25,7 @@ class PuppetLexer(RegexLexer):
             (r"(\s*)(\S+?)(\s*)(=>)(\s*)", bygroups(Text, Name.Attribute, Text, Operator, Text), 'value'),
             (r'(\,)', Punctuation),
             (r'(;)', Punctuation, '#pop'),
+            (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop:2'),
         ],
         'value': [
             (r"([A-Z].+?)(\[)(\".+\"|'.+')(\])", bygroups(Name.Namespace, Punctuation, String, Punctuation), '#pop'),
