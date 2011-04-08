@@ -15,18 +15,21 @@ class PuppetLexer(RegexLexer):
             (r'.*\n', Text),
         ],
         'resource': [
-            (r'(".+?")(:)', bygroups(String, Punctuation), 'instance'),
+            (r'(".+?")(:)', bygroups(String, Punctuation), ('instance', '#push')),
             (r"('.+?')(:)", bygroups(String, Punctuation), 'instance'),
             (r'(\S+?)(:)', bygroups(String, Punctuation), 'instance'),
             (r'\}', Punctuation, '#pop'),
         ],
         'instance': [
             (r"(\s*)(\S+?)(\s*)(=>)(\s*)", bygroups(Text, Name.Attribute, Text, Operator, Text), 'value'),
+            (r'\,', Punctuation),
+            (r'\;', Punctuation, '#pop'),
         ],
         'value': [
-            (r'[0-9]+', Number),
-            (r"[^;,\"'\s]+", String),
-            (r'".+"', String),
-            (r"'.+'", String),
+            (r"([A-Z].+?)(\[)(\".+\"|'.+')(\])", bygroups(Name.Namespace, Punctuation, String, Punctuation), '#pop'),
+            (r'[0-9]+', Number, '#pop'),
+            (r"[^;,\"'\s]+", String, '#pop'),
+            (r'".+"', String, '#pop'),
+            (r"'.+'", String, '#pop'),
         ],
     }
