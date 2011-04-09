@@ -18,7 +18,7 @@ class PuppetLexer(RegexLexer):
     tokens = {
         'root': [
             (r'(\s*)(include)(\s*)(\S+)(\n)', bygroups(Text, Keyword.Namespace, Text, Name.Class, Text)),
-            (r'(class)(\s*)(.*?)(\s*)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
+            (r'(class)(\s*)(.*?)(\s*)(inherits)?(\s*)(\S+)?(\s*)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
             (r'(define)(\s*)(.*?)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Punctuation), 'argumentlist'),
             (r'(\s*)(if)(\s*)', bygroups(Text, Keyword, Text), 'if'),
             (r'(\s*)(\})(\s*)(else)(\s*)(\{)', bygroups(Text, Punctuation, Text, Keyword, Text, Punctuation)),
