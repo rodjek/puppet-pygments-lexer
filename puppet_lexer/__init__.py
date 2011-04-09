@@ -5,6 +5,10 @@ from pygments.token import *
 # File { foo => bar }
 # class foo($bar) {
 # File["foo"] -> File["bar"] -> File["baz"] <- ~> 
+# import ''
+# Resource <<| foo == bar |>>
+# Resource <| foo == bar |>
+# regexp strings
 
 class PuppetLexer(RegexLexer):
     name = 'Puppet'
@@ -23,6 +27,7 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(case)(\s*)', bygroups(Text, Keyword, Text), 'case_conditional'),
             (r'(\s*)(\w+)(:)(\s*)(\{)', bygroups(Text, Name.Attribute, Punctuation, Text, Punctuation)),
             (r'(\s*)(\w+?)(\()', bygroups(Text, Name.Function, Punctuation), 'functionarglist'),
+            (r'(\s*)([A-Z][\w\:]+)(\s*)(<<?\|)', bygroups(Text, Name.Namespace, Text, Punctuation), 'virtual'),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
             (r'(\s*)(\})', bygroups(Text, Punctuation)),
             (r'(\S+)(\()', bygroups(Name.Function, Punctuation)),
@@ -108,7 +113,7 @@ class PuppetLexer(RegexLexer):
             (r'\]', Punctuation, '#pop'),
             (r'', Text, '#pop'),
         ],
-        'if': [
+        'conditional_items': [
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
             (r'(\$\w+)(\s*)', bygroups(Name.Variable, Text)),
             (r'"', String, 'dblstring'),
@@ -121,6 +126,9 @@ class PuppetLexer(RegexLexer):
             (r'\d+', Number),
             (r'\w+', String),
             (r'\s', Text),
+        ],
+        'if': [
+            include('conditional_items'),
             (r'\{', Punctuation, '#pop'),
         ],
         'functionarglist': [
@@ -147,5 +155,9 @@ class PuppetLexer(RegexLexer):
             (r'\n', Punctuation, '#pop'),
             (r'\s', Text),
             (r'', Text, '#pop'),
+        ],
+        'virtual': [
+            (r'\|>>?', Punctuation, '#pop'),
+            include('conditional_items'),
         ],
     }
