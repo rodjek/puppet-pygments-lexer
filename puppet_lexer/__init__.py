@@ -23,6 +23,7 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(if)(\s*)', bygroups(Text, Keyword, Text), 'if'),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
             (r'(\s*)(\})', bygroups(Text, Punctuation)),
+            (r'(\S+)(\()', bygroups(Name.Function, Punctuation)),
             (r'\s*#.*\n', Comment.Singleline),
             (r'\s*\n', Text),
         ],
@@ -60,7 +61,27 @@ class PuppetLexer(RegexLexer):
             (r'[^"\\]+', String),
             (r'"', String, '#pop:2'),
         ],
+        'dblstring': [
+            (r'(?:\\(?:[bdefnrstv\'"\\/]|[0-7][0-7]?[0-7]?|\^[a-zA-Z]))', String.Escape),
+            (r'[^"\\]+', String),
+            (r'"', String, '#pop'),
+        ],
         'if': [
-
+            (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
+            (r'(\$\w+)(\s*)', bygroups(Name.Variable, Text)),
+            (r'"', String, 'dblstring'),
+            (r'(\[|\]|\*\*|<<?|>>?|and|or|not|>=|<=|<=>|=~|={3}|!~|&&?|\|\||\.{1,3})', Operator),
+            (r'[-+/*%=<>&!^|~]=?', Operator),
+            (r'(true|false)(\s*)', bygroups(Keyword.Constant, Text)),
+            (r'(\()(\s*)', bygroups(Punctuation, Text)),
+            (r'(\))(\s*)', bygroups(Punctuation, Text)),
+            (r'\s', Text),
+            (r'\{', Punctuation, '#pop'),
+        ],
+        'functionarglist': [
+            (r'(\$\w+)(\,)?(\s*)', bygroups(Name.Variable, Punctuation, Text)),
+            (r'(\d+)(\,)?(\s*)', bygroups(Number, Punctuation, Text)),
+            (r'"', String, 'valdblstring'),
+            (r'\)', Punctuation, '#pop'),
         ],
     }
