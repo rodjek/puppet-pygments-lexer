@@ -46,8 +46,9 @@ class PuppetLexer(RegexLexer):
             # TODO: File['arr1', 'arr2'] support
             (r"([A-Z].+?)(\[)(\".+\"|'.+'|\S+)(\])", bygroups(Name.Namespace, Punctuation, String, Punctuation), '#pop'),
             (r'\$\S+', Name.Variable, '#pop'),
-            (r"[^;,\"'\s]+", String, '#pop'),
+            (r"[^\[;,\"'\s]+", String, '#pop'),
             (r'"', String, 'valdblstring'),
+            (r'\[', Punctuation, 'valarray'),
             (r"'.+?'", String, '#pop'),
         ],
         # TODO: test \" in argument
@@ -66,6 +67,12 @@ class PuppetLexer(RegexLexer):
             (r'[^"\\]+', String),
             (r'"', String, '#pop'),
         ],
+        'valarray': [
+            (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
+            (r'\,', Punctuation),
+            (r'\s', Text),
+            (r'\]', Punctuation, '#pop:2'),
+        ],
         'if': [
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
             (r'(\$\w+)(\s*)', bygroups(Name.Variable, Text)),
@@ -81,7 +88,7 @@ class PuppetLexer(RegexLexer):
         'functionarglist': [
             (r'(\$\w+)(\,)?(\s*)', bygroups(Name.Variable, Punctuation, Text)),
             (r'(\d+)(\,)?(\s*)', bygroups(Number, Punctuation, Text)),
-            (r'"', String, 'valdblstring'),
+            (r'"', String, 'dblstring'),
             (r'\)', Punctuation, '#pop'),
         ],
     }
