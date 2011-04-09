@@ -58,13 +58,17 @@ class PuppetLexer(RegexLexer):
             (r'(\))(\s*)(\{)', bygroups(Punctuation, Text, Punctuation), '#pop'),
         ],
         'valdblstring': [
+            (r'\$\{.+?\}', Name.Variable),
             (r'(?:\\(?:[bdefnrstv\'"\\/]|[0-7][0-7]?[0-7]?|\^[a-zA-Z]))', String.Escape),
-            (r'[^"\\]+', String),
+            (r'[^"\\\$]+', String),
+            (r'\$', String),
             (r'"', String, '#pop:2'),
         ],
         'dblstring': [
+            (r'\$\{.+?\}', Name.Variable),
             (r'(?:\\(?:[bdefnrstv\'"\\/]|[0-7][0-7]?[0-7]?|\^[a-zA-Z]))', String.Escape),
-            (r'[^"\\]+', String),
+            (r'[^"\\\$]+', String),
+            (r'\$', String),
             (r'"', String, '#pop'),
         ],
         'valarray': [
