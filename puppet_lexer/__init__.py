@@ -22,6 +22,7 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)([A-Z]\S+)(\[)', bygroups(Text, Name.Namespace, Punctuation), ('instance', 'defined_resource_namevar')),
             (r'(\s*)(case)(\s*)', bygroups(Text, Keyword, Text), 'case_conditional'),
             (r'(\s*)(\w+)(:)(\s*)(\{)', bygroups(Text, Name.Attribute, Punctuation, Text, Punctuation)),
+            (r'(\s*)(\w+?)(\()', bygroups(Text, Name.Function, Punctuation), 'functionarglist'),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
             (r'(\s*)(\})', bygroups(Text, Punctuation)),
             (r'(\S+)(\()', bygroups(Name.Function, Punctuation)),
