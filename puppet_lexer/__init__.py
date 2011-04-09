@@ -117,6 +117,8 @@ class PuppetLexer(RegexLexer):
             (r'(true|false)(\s*)', bygroups(Keyword.Constant, Text)),
             (r'(\()(\s*)', bygroups(Punctuation, Text)),
             (r'(\))(\s*)', bygroups(Punctuation, Text)),
+            (r'\d+', Number),
+            (r'\w+', String),
             (r'\s', Text),
             (r'\{', Punctuation, '#pop'),
         ],
