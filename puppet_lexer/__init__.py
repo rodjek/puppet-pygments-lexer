@@ -51,6 +51,7 @@ class PuppetLexer(RegexLexer):
             (r'(\?)(\s*)(\{)', bygroups(Operator, Text, Punctuation), '#push'),
             (r'(;)', Punctuation, '#pop'),
             (r'\}\,', Punctuation),
+            (r'#.*\n', Comment.Singleline),
             (r'\s', Text),
             (r'', Text, '#pop'),
         ],
