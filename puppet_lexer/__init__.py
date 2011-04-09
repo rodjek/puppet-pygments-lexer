@@ -54,6 +54,7 @@ class PuppetLexer(RegexLexer):
             (r'"', String, 'valdblstring'),
             (r'\[', Punctuation, 'valarray'),
             (r"'.+?'", String, '#pop'),
+            (r'', Text, '#pop'),
         ],
         # TODO: test \" in argument
         'argumentlist': [
@@ -104,6 +105,7 @@ class PuppetLexer(RegexLexer):
             (r'\{', Punctuation, '#pop'),
         ],
         'functionarglist': [
+            (r'(\w+)(\()', bygroups(Name.Function, Punctuation), '#push'),
             (r'(\$\w+)(\,)?(\s*)', bygroups(Name.Variable, Punctuation, Text)),
             (r'(\d+)(\,)?(\s*)', bygroups(Number, Punctuation, Text)),
             (r'"', String, 'dblstring'),
