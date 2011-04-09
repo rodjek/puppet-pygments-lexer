@@ -46,6 +46,7 @@ class PuppetLexer(RegexLexer):
             # TODO: File['arr1', 'arr2'] support
             (r"([A-Z].+?)(\[)(\".+\"|'.+'|\S+)(\])", bygroups(Name.Namespace, Punctuation, String, Punctuation), '#pop'),
             (r'\$\S+', Name.Variable, '#pop'),
+            (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
             (r"[^\[;,\"'\s]+", String, '#pop'),
             (r'"', String, 'valdblstring'),
             (r'\[', Punctuation, 'valarray'),
@@ -93,6 +94,7 @@ class PuppetLexer(RegexLexer):
             (r'(\$\w+)(\,)?(\s*)', bygroups(Name.Variable, Punctuation, Text)),
             (r'(\d+)(\,)?(\s*)', bygroups(Number, Punctuation, Text)),
             (r'"', String, 'dblstring'),
+            (r'\)\,', Punctuation, '#pop:2'),
             (r'\)', Punctuation, '#pop'),
         ],
     }
