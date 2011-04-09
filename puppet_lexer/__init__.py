@@ -58,7 +58,7 @@ class PuppetLexer(RegexLexer):
             (r"([A-Z].+?)(\[)", bygroups(Name.Namespace, Punctuation), 'valarray'),
             (r'\$\S+', Name.Variable, '#pop'),
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
-            (r"[^\[;,\"'\s]+", String, '#pop'),
+            (r"[^\[;,\"'\s\}]+", String, '#pop'),
             (r'"', String, 'valdblstring'),
             (r'\[', Punctuation, 'valarray'),
             (r"'.+?'", String, '#pop'),
