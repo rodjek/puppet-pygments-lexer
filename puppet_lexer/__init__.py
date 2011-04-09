@@ -94,6 +94,7 @@ class PuppetLexer(RegexLexer):
             (r'(\$\w+)(\,)?(\s*)', bygroups(Name.Variable, Punctuation, Text)),
             (r'(\d+)(\,)?(\s*)', bygroups(Number, Punctuation, Text)),
             (r'"', String, 'dblstring'),
+            (r'\)\,[ \t]+', Punctuation, '#pop'),
             (r'\)\,', Punctuation, '#pop:2'),
             (r'\)', Punctuation, '#pop'),
         ],
