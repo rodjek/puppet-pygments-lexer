@@ -34,6 +34,7 @@ class PuppetLexer(RegexLexer):
             (r"(\s*)('.+?')(:)", bygroups(Text, String, Punctuation), 'instance'),
             (r'(\s*)(\$\S+)(:)', bygroups(Text, Name.Variable, Punctuation), 'instance'),
             (r'(\s*)(\S+?)(:)', bygroups(Text, String, Punctuation), 'instance'),
+            (r'(\s*)(\[)', bygroups(Text, Punctuation), 'valarray'),
             (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop'),
         ],
         'instance': [
@@ -75,8 +76,13 @@ class PuppetLexer(RegexLexer):
         ],
         'valarray': [
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
+            (r"'.*?'", String),
+            (r'"', String, 'dblstring'),
+            (r'\$\w+', Name.Variable),
+            (r'[^\s\,\]]+', String),
             (r'\,', Punctuation),
             (r'\s', Text),
+            (r'\]:', Punctuation, ('#pop', 'instance')),
             (r'\]', Punctuation, '#pop:2'),
         ],
         'if': [
