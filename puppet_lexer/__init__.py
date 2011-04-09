@@ -3,12 +3,8 @@ from pygments.token import *
 
 # TODO
 # File { foo => bar }
-# File["bar"] { baz => gronk }
-# class foo inherits baz
-# [Package["foo"], Package["bar"]]
 # class foo($bar) {
 # File["foo"] -> File["bar"] -> File["baz"] <- ~> 
-#
 
 class PuppetLexer(RegexLexer):
     name = 'Puppet'
@@ -24,6 +20,8 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(\})(\s*)(else)(\s*)(\{)', bygroups(Text, Punctuation, Text, Keyword, Text, Punctuation)),
             (r'(\s*)(\$\w+)(\s*)(=)(\s*)', bygroups(Text, Name.Variable, Text, Operator, Text), 'var_assign'),
             (r'(\s*)([A-Z]\S+)(\[)', bygroups(Text, Name.Namespace, Punctuation), ('instance', 'defined_resource_namevar')),
+            (r'(\s*)(case)(\s*)', bygroups(Text, Keyword, Text), 'case_conditional'),
+            (r'(\s*)(\w+)(:)(\s*)(\{)', bygroups(Text, Name.Attribute, Punctuation, Text, Punctuation)),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
             (r'(\s*)(\})', bygroups(Text, Punctuation)),
             (r'(\S+)(\()', bygroups(Name.Function, Punctuation)),
@@ -44,6 +42,14 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(\S+?)(:)', bygroups(Text, String, Punctuation), 'instance'),
             (r'(\s*)(\[)', bygroups(Text, Punctuation), 'valarray'),
             (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop'),
+        ],
+        'case_conditional': [
+            (r'"', String, 'dblstring'),
+            (r"'.+'", String),
+            (r'\$\w+', Name.Variable),
+            (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
+            (r'\s', Text),
+            (r'\{', Punctuation, '#pop'),
         ],
         'instance': [
             (r"(\S+?)(\s*)(=>)(\s*)", bygroups(Name.Attribute, Text, Operator, Text), 'value'),
@@ -133,7 +139,10 @@ class PuppetLexer(RegexLexer):
             (r'(true|false)(\s*)', bygroups(Keyword.Constant, Text)),
             (r'(\()(\s*)', bygroups(Punctuation, Text)),
             (r'(\))(\s*)', bygroups(Punctuation, Text)),
+            (r'\d+', Number),
+            (r'\w+', String),
             (r'\n', Punctuation, '#pop'),
             (r'\s', Text),
+            (r'', Text, '#pop'),
         ],
     }
