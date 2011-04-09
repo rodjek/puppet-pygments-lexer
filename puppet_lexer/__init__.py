@@ -31,7 +31,7 @@ class PuppetLexer(RegexLexer):
         ],
         # TODO: test \" in namevar
         'resource': [
-            (r'(\s*)(".+?")(:)', bygroups(Text, String, Punctuation), 'instance'),
+            (r'(\s*)(")', bygroups(Text, String), 'dblstring'),
             (r"(\s*)('.+?')(:)", bygroups(Text, String, Punctuation), 'instance'),
             (r'(\s*)(\$\S+)(:)', bygroups(Text, Name.Variable, Punctuation), 'instance'),
             (r'(\s*)(\S+?)(:)', bygroups(Text, String, Punctuation), 'instance'),
@@ -73,6 +73,7 @@ class PuppetLexer(RegexLexer):
             (r'(?:\\(?:[bdefnrstv\'"\\/]|[0-7][0-7]?[0-7]?|\^[a-zA-Z]))', String.Escape),
             (r'[^"\\\$]+', String),
             (r'\$', String),
+            (r'(")(\s*)(:)', bygroups(String, Text, Punctuation), ('#pop', 'instance')),
             (r'"', String, '#pop'),
         ],
         'valarray': [
