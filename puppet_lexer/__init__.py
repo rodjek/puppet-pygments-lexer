@@ -23,13 +23,27 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(if)(\s*)', bygroups(Text, Keyword, Text), 'if'),
             (r'(\s*)(\})(\s*)(else)(\s*)(\{)', bygroups(Text, Punctuation, Text, Keyword, Text, Punctuation)),
             (r'(\s*)(\$\w+)(\s*)(=)(\s*)', bygroups(Text, Name.Variable, Text, Operator, Text), 'var_assign'),
+            (r'(\s*)([A-Z]\S+)(\[)', bygroups(Text, Name.Namespace, Punctuation), ('defined_resource', 'defined_resource_namevar')),
             (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
             (r'(\s*)(\})', bygroups(Text, Punctuation)),
             (r'(\S+)(\()', bygroups(Name.Function, Punctuation)),
             (r'\s*#.*\n', Comment.Singleline),
             (r'\s*\n', Text),
         ],
-        # TODO: test \" in namevar
+        'defined_resource_namevar': [
+            (r'"', String, 'dblstring'),
+            (r"'.+'", String),
+            (r'[^\s\]]+', String),
+            (r'(\])(\s*)(\{)', bygroups(Punctuation, Text, Punctuation), '#pop'),
+            (r'\s', Text),
+        ],
+        'defined_resource': [
+            (r"(\s*)(\S+?)(\s*)(=>)(\s*)", bygroups(Text, Name.Attribute, Text, Operator, Text), 'value'),
+            (r'(\,)', Punctuation),
+            (r'(\s+)(\?)(\s*)(\{)', bygroups(Text, Operator, Text, Punctuation), '#push'),
+            (r'(;)', Punctuation, '#pop'),
+            (r'', Text, '#pop'),
+        ],
         'resource': [
             (r'(\s*)(")', bygroups(Text, String), 'dblstring'),
             (r"(\s*)('.+?')(:)", bygroups(Text, String, Punctuation), 'instance'),
@@ -46,7 +60,6 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop:2'),
         ],
         'value': [
-            # TODO: File['arr1', 'arr2'] support
             (r"([A-Z].+?)(\[)", bygroups(Name.Namespace, Punctuation), 'valarray'),
             (r'\$\S+', Name.Variable, '#pop'),
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
