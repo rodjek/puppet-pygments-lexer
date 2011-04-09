@@ -82,8 +82,11 @@ class PuppetLexer(RegexLexer):
         # TODO: test \" in argument
         'argumentlist': [
             (r"(\$\w+)(\s*)(=)(\s*)(\".*?\"|'.*?'|\w+)(\,)?(\s*)", bygroups(Name.Variable, Text, Operator, Text, String, Punctuation, Text)),
+            (r'(\$\w+)(\s*)(=)(\s*)(\[)', bygroups(Name.Variable, Text, Operator, Text, Punctuation), 'valarray'),
             (r'(\$\w+)(\,)?(\s*)', bygroups(Name.Variable, Punctuation, Text)),
             (r'(\))(\s*)(\{)', bygroups(Punctuation, Text, Punctuation), '#pop'),
+            (r'\,', Punctuation),
+            (r'\s', Text),
         ],
         'valdblstring': [
             (r'\$\{.+?\}', Name.Variable),
