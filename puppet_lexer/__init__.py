@@ -78,13 +78,16 @@ class PuppetLexer(RegexLexer):
         ],
         'valarray': [
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
+            (r'([A-Z].+?)(\[)', bygroups(Name.Namespace, Punctuation), '#push'),
             (r"'.*?'", String),
             (r'"', String, 'dblstring'),
             (r'\$\w+', Name.Variable),
             (r'[^\s\,\]]+', String),
             (r'\,', Punctuation),
             (r'\s', Text),
+            (r'\]\,\s+', Punctuation, '#pop'),
             (r'\]:', Punctuation, ('#pop', 'instance')),
+            (r'\]\]', Punctuation, '#pop:3'),
             (r'\]', Punctuation, '#pop:2'),
         ],
         'if': [
