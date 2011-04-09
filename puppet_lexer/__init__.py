@@ -39,6 +39,7 @@ class PuppetLexer(RegexLexer):
         'instance': [
             (r"(\s*)(\S+?)(\s*)(=>)(\s*)", bygroups(Text, Name.Attribute, Text, Operator, Text), 'value'),
             (r'(\,)', Punctuation),
+            (r'(\s+)(\?)(\s*)(\{)', bygroups(Text, Operator, Text, Punctuation), '#push'),
             (r'(;)', Punctuation, '#pop'),
             (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop:2'),
         ],
