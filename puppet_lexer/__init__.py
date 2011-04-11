@@ -43,8 +43,8 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(")', bygroups(Text, String), 'dblstring'),
             (r"(\s*)('.+?')(:)", bygroups(Text, String, Punctuation), 'instance'),
             (r'(\s*)(\$\S+)(:)', bygroups(Text, Name.Variable, Punctuation), 'instance'),
-            (r'(\s*)(\S+?)(:)', bygroups(Text, String, Punctuation), 'instance'),
             (r'(\s*)(\[)', bygroups(Text, Punctuation), 'valarray'),
+            (r'(\s*)(\S+?)(:)', bygroups(Text, String, Punctuation), 'instance'),
             (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop'),
         ],
         'case_conditional': [
