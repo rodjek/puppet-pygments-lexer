@@ -5,9 +5,6 @@ from pygments.token import *
 # File { foo => bar }
 # class foo($bar) {
 # File["foo"] -> File["bar"] -> File["baz"] <- ~> 
-# import ''
-# Resource <<| foo == bar |>>
-# Resource <| foo == bar |>
 # regexp strings
 
 class PuppetLexer(RegexLexer):
@@ -18,6 +15,7 @@ class PuppetLexer(RegexLexer):
     tokens = {
         'root': [
             (r'(\s*)(include)(\s*)(\S+)(\n)', bygroups(Text, Keyword.Namespace, Text, Name.Class, Text)),
+            (r'(\s*)(import)(\s*)([\'"].+?[\'"])', bygroups(Text, Keyword.Namespace, Text, String)),
             (r'(class)(\s*)(.*?)(\s*)(inherits)?(\s*)(\S+)?(\s*)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
             (r'(define)(\s*)(.*?)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Punctuation), 'argumentlist'),
             (r'(\s*)(if)(\s*)', bygroups(Text, Keyword, Text), 'if'),
