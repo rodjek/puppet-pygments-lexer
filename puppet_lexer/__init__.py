@@ -105,6 +105,7 @@ class PuppetLexer(RegexLexer):
         'valarray': [
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
             (r'([A-Z].+?)(\[)', bygroups(Name.Namespace, Punctuation), '#push'),
+            (r'\[', Punctuation, '#push'),
             (r"'.*?'", String),
             (r'"', String, 'dblstring'),
             (r'\$\w+', Name.Variable),
