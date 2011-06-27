@@ -96,7 +96,7 @@ class PuppetLexer(RegexLexer):
         ],
         'dblstring': [
             (r'\$\{.+?\}', Name.Variable),
-            (r'(?:\\(?:[bdefnrstv\'"\\/]|[0-7][0-7]?[0-7]?|\^[a-zA-Z]))', String.Escape),
+            (r'(?:\\(?:[bdefnrstv\'"\$\\/]|[0-7][0-7]?[0-7]?|\^[a-zA-Z]))', String.Escape),
             (r'[^"\\\$]+', String),
             (r'\$', String),
             (r'(")(\s*)(:)', bygroups(String, Text, Punctuation), ('#pop', 'instance')),
