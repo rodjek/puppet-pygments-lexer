@@ -2,7 +2,6 @@ from pygments.lexer import RegexLexer, bygroups, include
 from pygments.token import *
 
 # TODO
-# File["foo"] -> File["bar"] -> File["baz"] <- ~> 
 # regexp strings
 
 class PuppetLexer(RegexLexer):
