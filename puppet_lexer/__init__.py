@@ -2,7 +2,6 @@ from pygments.lexer import RegexLexer, bygroups, include
 from pygments.token import *
 
 # TODO
-# node foo { }
 # class foo($bar) {
 # File["foo"] -> File["bar"] -> File["baz"] <- ~> 
 # regexp strings
@@ -17,6 +16,7 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(include)(\s*)(\S+)(\n)', bygroups(Text, Keyword.Namespace, Text, Name.Class, Text)),
             (r'(\s*)(import)(\s*)([\'"].+?[\'"])', bygroups(Text, Keyword.Namespace, Text, String)),
             (r'(class)(\s*)(.*?)(\s*)(inherits)?(\s*)(\S+)?(\s*)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
+            (r'(node)(\s*)(.*?)(\s*)(inherits)?(\s*)(\S+)?(\s*)(\{)', bygroups(Keyword.Declaration, Text, String, Text, Keyword.Declaration, Text, String, Text, Punctuation)),
             (r'(define)(\s*)(.*?)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Punctuation), 'argumentlist'),
             (r'(\s*)(if)(\s*)', bygroups(Text, Keyword, Text), 'if'),
             (r'(\s*)(\})(\s*)(else)(\s*)(\{)', bygroups(Text, Punctuation, Text, Keyword, Text, Punctuation)),
