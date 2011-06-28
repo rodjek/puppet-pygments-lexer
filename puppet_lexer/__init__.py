@@ -26,10 +26,11 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)([\w\,]+)(:)(\s*)(\{)', bygroups(Text, Name.Attribute, Punctuation, Text, Punctuation)),
             (r'(\s*)(\w+?)(\()', bygroups(Text, Name.Function, Punctuation), 'functionarglist'),
             (r'(\s*)([A-Z][\w\:]+)(\s*)(<<?\|)', bygroups(Text, Name.Namespace, Text, Punctuation), 'virtual'),
-            (r'(.*?)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), 'resource'),
+            (r'(\s*)(\S+)(\s*)(\{)(\s*)', bygroups(Text, Name.Class, Text, Punctuation, Text), 'resource'),
             (r'(\s*)(\})', bygroups(Text, Punctuation)),
             (r'(\S+)(\()', bygroups(Name.Function, Punctuation)),
             (r'\s*#.*\n', Comment.Singleline),
+            (r'(\s*)(<-|->|<~|~>)', bygroups(Text, Operator)),
             (r'\s*\n', Text),
         ],
         'defined_resource_namevar': [
@@ -37,6 +38,8 @@ class PuppetLexer(RegexLexer):
             (r"'.+'", String),
             (r'[^\s\]]+', String),
             (r'(\])(\s*)(\{)', bygroups(Punctuation, Text, Punctuation), '#pop'),
+            (r'(\])(\s*)(<-|->|<~|~>)', bygroups(Punctuation, Text, Operator), '#pop'),
+            (r'\]', Punctuation, '#pop'),
             (r'\s', Text),
         ],
         'resource': [
