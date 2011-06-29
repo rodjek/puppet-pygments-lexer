@@ -161,6 +161,7 @@ class PuppetLexer(RegexLexer):
             (r'\w+', String),
             (r'\n', Punctuation, '#pop'),
             (r'\s', Text),
+            (r'\{', Punctuation, 'hash'),
             (r'', Text, '#pop'),
         ],
         'virtual': [
@@ -169,4 +170,10 @@ class PuppetLexer(RegexLexer):
             include('conditional_items'),
             (r'\}', Punctuation, '#pop'),
         ],
+        'hash': [
+            (r'(\S+?)(\s*)(=>)(\s*)', bygroups(Name.Attribute, Text, Operator, Text), 'var_assign'),
+            (r'\}', Punctuation, '#pop'),
+            (r'\s', Text),
+            (r'', Text, '#pop'),
+        ]
     }
