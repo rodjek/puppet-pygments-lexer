@@ -80,6 +80,14 @@ class PuppetLexer(RegexLexer):
             (r'#.*?\n', Comment.Singleline, '#pop'),
             (r'', Text, '#pop'),
         ],
+        'varname': [
+            (r'\w+', Name.Variable),
+            (r'\$', Name.Variable, '#push'),
+            (r'[\[\]]', Punctuation),
+            (r"'.+?'", String),
+            (r'"', String, 'valdblstring'),
+            (r'', Text, '#pop'),
+        ],
         # TODO: test \" in argument
         'argumentlist': [
             (r"(\$\w+)(\s*)(=)(\s*)(\".*?\"|'.*?'|\w+)(\,)?(\s*)", bygroups(Name.Variable, Text, Operator, Text, String, Punctuation, Text)),
@@ -138,8 +146,9 @@ class PuppetLexer(RegexLexer):
         ],
         'functionarglist': [
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), '#push'),
-            (r'(\$\w+)(\,)?(\s*)', bygroups(Name.Variable, Punctuation, Text)),
+            (r'\$', Name.Variable, 'varname'),
             (r'(\d+)(\,)?(\s*)', bygroups(Number, Punctuation, Text)),
+            (r'(\,)(\s*)', bygroups(Punctuation, Text)),
             (r'"', String, 'dblstring'),
             (r'\)\,[ \t]+', Punctuation, '#pop'),
             (r'\)\,', Punctuation, '#pop:2'),
