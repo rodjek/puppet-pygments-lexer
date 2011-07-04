@@ -18,7 +18,7 @@ class PuppetLexer(RegexLexer):
             (r'(define|class)(\s+)(\S+?)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Punctuation), 'argumentlist'),
             (r'(\s*)(if)(\s*)', bygroups(Text, Keyword, Text), 'if'),
             (r'(\s*)(\})(\s*)(else)(\s*)(\{)', bygroups(Text, Punctuation, Text, Keyword, Text, Punctuation)),
-            (r'(\s*)(\$\w+)(\s*)(=)(\s*)', bygroups(Text, Name.Variable, Text, Operator, Text), 'var_assign'),
+            (r'(\s*)(\$)', bygroups(Text, Name.Variable), ('variable', 'varname')),
             (r'(\s*)([A-Z]\S+)(\[)', bygroups(Text, Name.Namespace, Punctuation), ('instance', 'defined_resource_namevar')),
             (r'(\s*)([A-Z]\S+)(\s*)(\{)', bygroups(Text, Name.Namespace, Text, Punctuation), 'instance'),
             (r'(\s*)(case)(\s*)', bygroups(Text, Keyword, Text), 'case_conditional'),
@@ -32,6 +32,11 @@ class PuppetLexer(RegexLexer):
             (r'(\s*)(<-|->|<~|~>)', bygroups(Text, Operator)),
             (r'\s*\n', Text),
         ],
+        'variable': [
+            (r'(\s*)(=)(\s*)', bygroups(Text, Operator, Text), 'var_assign'),
+            (r':', Punctuation, 'instance'),
+            (r'', Text, '#pop'),
+        ],
         'defined_resource_namevar': [
             (r'"', String, 'dblstring'),
             (r"'.+'", String),
@@ -44,7 +49,7 @@ class PuppetLexer(RegexLexer):
         'resource': [
             (r'(\s*)(")', bygroups(Text, String), 'dblstring'),
             (r"(\s*)('.+?')(:)", bygroups(Text, String, Punctuation), 'instance'),
-            (r'(\s*)(\$\S+)(:)', bygroups(Text, Name.Variable, Punctuation), 'instance'),
+            (r'(\s*)(\$)', bygroups(Text, Name.Variable), ('variable', 'varname')),
             (r'(\s*)(\[)', bygroups(Text, Punctuation), 'valarray'),
             (r'(\s*)(\S+?)(:)', bygroups(Text, String, Punctuation), 'instance'),
             (r'(\s*)(\})', bygroups(Text, Punctuation), '#pop'),
@@ -52,7 +57,7 @@ class PuppetLexer(RegexLexer):
         'case_conditional': [
             (r'"', String, 'dblstring'),
             (r"'.+'", String),
-            (r'\$\w+', Name.Variable),
+            (r'\$', Name.Variable, ('variable', 'varname')),
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
             (r'\s', Text),
             (r'\{', Punctuation, '#pop'),
@@ -69,7 +74,7 @@ class PuppetLexer(RegexLexer):
         ],
         'value': [
             (r"([A-Z].+?)(\[)", bygroups(Name.Namespace, Punctuation), 'valarray'),
-            (r'\$\S+', Name.Variable, '#pop'),
+            (r'\$', Name.Variable, ('#pop', 'variable', 'varname')),
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
             (r"[^\[;,\"'\s\}\]\?#]+", String, '#pop'),
             (r'"', String, 'valdblstring'),
@@ -118,7 +123,7 @@ class PuppetLexer(RegexLexer):
             (r'\[', Punctuation, '#push'),
             (r"'.*?'", String),
             (r'"', String, 'dblstring'),
-            (r'\$\w+', Name.Variable),
+            (r'\$', Name.Variable, ('variable', 'varname')),
             (r'[^\s\,\]]+', String),
             (r'\,', Punctuation),
             (r'\s', Text),
@@ -128,7 +133,7 @@ class PuppetLexer(RegexLexer):
         ],
         'conditional_items': [
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
-            (r'(\$\w+)(\s*)', bygroups(Name.Variable, Text)),
+            (r'\$', Name.Variable, ('variable', 'varname')),
             (r'"', String, 'dblstring'),
             (r"'.*'", String),
             (r'(\[|\]|\*\*|<<?|>>?|in|and|or|not|>=|<=|<=>|=~|={3}|!~|&&?|\|\||\.{1,3})', Operator),
@@ -156,7 +161,7 @@ class PuppetLexer(RegexLexer):
         ],
         'var_assign': [
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'functionarglist'),
-            (r'(\$\w+)(\s*)', bygroups(Name.Variable, Text)),
+            (r'\$', Name.Variable, ('variable', 'varname')),
             (r'"', String, 'dblstring'),
             (r"'.*'", String),
             (r'\[', Punctuation, 'valarray'),
