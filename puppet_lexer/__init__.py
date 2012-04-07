@@ -13,6 +13,7 @@ class PuppetLexer(RegexLexer):
         'root': [
             include('comments'),
             (r'(class)(\s+)([\w:]+)(\s+)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
+            (r'(class|define)(\s+)([\w:]+)(\s*)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation), 'paramlist'),
             (r'(@{0,2}[\w:]+)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), ('type', 'namevar')),
             (r'\}', Punctuation),
             (r'\s', Text),
@@ -51,6 +52,13 @@ class PuppetLexer(RegexLexer):
             (r',', Punctuation),
             (r'\s', Text),
             (r'\)', Punctuation, '#pop'),
+        ],
+        'paramlist': [
+            include('value'),
+            (r'=', Punctuation),
+            (r',', Punctuation),
+            (r'\s', Text),
+            (r'(\))(\s*)(\{)', bygroups(Punctuation, Text, Punctuation), '#pop'),
         ],
         'type': [
             (r'(\w+)(\s*)(=>)(\s*)', bygroups(Name.Tag, Text, Punctuation, Text), 'param_value'),
