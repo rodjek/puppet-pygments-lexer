@@ -24,6 +24,14 @@ class PuppetLexer(RegexLexer):
             (r"'.+'", String.Single),
             (r'\w+', String.Symbol),
         ],
+            (r'"', String.Double, 'dblstring'),
+        ],
+        'dblstring': [
+            (r'\$\{.+?\}', String.Interpol),
+            (r'(?:\\(?:[bdefnrstv\'"\$\\/]|[0-7][0-7]?[0-7]?|\^[a-zA-Z]))', String.Escape),
+            (r'[^"\\\$]+', String.Double),
+            (r'\$', String.Double),
+            (r'"', String.Double, '#pop'),
         'variables': [
             (r'\$(::)?(\w+::)*\w+', Name.Variable),
         ],
