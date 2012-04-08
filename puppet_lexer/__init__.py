@@ -55,7 +55,7 @@ class PuppetLexer(RegexLexer):
             (r'(true|false)', Literal),
         ],
         'operators': [
-            (r'(==|\*|-|\+|<<|>>|!=|!|>=|<=|<|>|and|or|in)', Operator),
+            (r'(==|=~|\*|-|\+|<<|>>|!=|!~|!|>=|<=|<|>|and|or|in)', Operator),
         ],
         'conditional': [
             include('value'),
@@ -114,6 +114,7 @@ class PuppetLexer(RegexLexer):
             (r'\[', Punctuation, 'array'),
             (r',', Punctuation, '#pop'),
             (r';', Punctuation, '#pop'),
+            (r'\s', Text, '#pop'),
         ],
         'array': [
             include('value'),
