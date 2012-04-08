@@ -31,7 +31,7 @@ class PuppetLexer(RegexLexer):
             (r'\s*#.*\n', Comment.Singleline),
         ],
         'strings': [
-            (r"'.*'", String.Single),
+            (r"'.*?'", String.Single),
             (r'\w+', String.Symbol),
             (r'"', String.Double, 'dblstring'),
         ],
@@ -99,6 +99,15 @@ class PuppetLexer(RegexLexer):
             include('variables'),
             include('comments'),
             include('booleans'),
+            (r'(\s*)(\?)(\s*)(\{)', bygroups(Text, Punctuation, Text, Punctuation), 'selector'),
+        ],
+        'selector': [
+            (r'default', Keyword.Reserved),
+            include('value'),
+            (r'=>', Punctuation),
+            (r',', Punctuation),
+            (r'\s', Text),
+            (r'\}', Punctuation, '#pop'),
         ],
         'param_value': [
             include('value'),
