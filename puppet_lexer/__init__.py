@@ -25,7 +25,7 @@ class PuppetLexer(RegexLexer):
             (r'\s*#.*\n', Comment.Singleline),
         ],
         'strings': [
-            (r"'.+'", String.Single),
+            (r"'.*'", String.Single),
             (r'\w+', String.Symbol),
             (r'"', String.Double, 'dblstring'),
         ],
