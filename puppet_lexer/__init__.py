@@ -82,6 +82,7 @@ class PuppetLexer(RegexLexer):
         'conditional': [
             include('operators'),
             include('value'),
+            (r'\[', Punctuation, 'array'),
             (r'\(', Punctuation, 'conditional'),
             (r'\{', Punctuation, '#pop'),
             (r'\)', Punctuation, '#pop'),
