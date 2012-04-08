@@ -93,7 +93,7 @@ class PuppetLexer(RegexLexer):
             (r'', Text, 'namevar'),
         ],
         'value': [
-            (r'([A-Z]\w+)(\[)', bygroups(Name.Class, Punctuation), 'array'),
+            (r'([A-Z][\w:]+)+(\[)', bygroups(Name.Class, Punctuation), 'array'),
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'function'),
             include('strings'),
             include('variables'),
