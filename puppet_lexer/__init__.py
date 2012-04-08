@@ -60,8 +60,8 @@ class PuppetLexer(RegexLexer):
             (r'\s', Text),
         ],
         'namevar': [
-            include('strings'),
-            include('variables'),
+            include('value'),
+            (r'\[', Punctuation, 'array'),
             (r'\s', Text),
             (r':', Punctuation, '#pop'),
             (r'\}', Punctuation, '#pop'),
