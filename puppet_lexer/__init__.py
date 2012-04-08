@@ -32,6 +32,7 @@ class PuppetLexer(RegexLexer):
             (r'\}', Text, '#pop'),
         ],
         'node_name': [
+            (r'inherits', Keyword.Declaration),
             (r'[\w\.]+', String),
             include('value'),
             (r',', Punctuation),
