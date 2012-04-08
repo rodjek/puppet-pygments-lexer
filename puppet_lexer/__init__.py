@@ -55,7 +55,7 @@ class PuppetLexer(RegexLexer):
             (r'(true|false)', Literal),
         ],
         'operators': [
-            (r'(==|!|\*|-|\+|<<|>>|!=|>=|<=|<|>|and|or|in)', Operator),
+            (r'(==|\*|-|\+|<<|>>|!=|!|>=|<=|<|>|and|or|in)', Operator),
         ],
         'conditional': [
             include('value'),
