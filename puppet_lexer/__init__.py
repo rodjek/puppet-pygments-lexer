@@ -19,6 +19,7 @@ class PuppetLexer(RegexLexer):
             (r'(@{0,2}[\w:]+)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), ('type', 'namevar')),
             (r'\$(::)?(\w+::)*\w+', Name.Variable, 'var_assign'),
             (r'(include)(\s+)', bygroups(Keyword.Namespace, Text), 'include'),
+            (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'function'),
             (r'\}', Punctuation),
             (r'\s', Text),
         ],
@@ -34,6 +35,7 @@ class PuppetLexer(RegexLexer):
             (r"'.*?'", String.Single),
             (r'\w+', String.Symbol),
             (r'"', String.Double, 'dblstring'),
+            (r'\/.+?\/', String.Regex),
         ],
         'dblstring': [
             (r'\$\{.+?\}', String.Interpol),
