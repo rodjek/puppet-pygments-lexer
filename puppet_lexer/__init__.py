@@ -1,9 +1,6 @@
 from pygments.lexer import RegexLexer, bygroups, include
 from pygments.token import *
 
-# TODO
-# regexp strings
-
 class PuppetLexer(RegexLexer):
     name = 'Puppet'
     aliases = ['puppet']
@@ -17,6 +14,7 @@ class PuppetLexer(RegexLexer):
             include('comments'),
             (r'(class)(\s+)([\w:]+)(\s+)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation), 'block'),
             (r'(class|define)(\s+)([\w:]+)(\s*)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation), ('block','paramlist')),
+            (r'node', Keyword.Declaration, ('block', 'node_name')),
             (r'elsif', Keyword.Reserved, ('block', 'conditional')),
             (r'if', Keyword.Reserved, ('block', 'conditional')),
             (r'unless', Keyword.Reserved, ('block', 'conditional')),
@@ -31,6 +29,13 @@ class PuppetLexer(RegexLexer):
         'block': [
             include('puppet'),
             (r'\}', Text, '#pop'),
+        ],
+        'node_name': [
+            (r'[\w\.]+', String),
+            include('value'),
+            (r',', Punctuation),
+            (r'\s', Text),
+            (r'\{', Punctuation, '#pop'),
         ],
         'include': [
             (r'[\w:]+', Name.Class),
