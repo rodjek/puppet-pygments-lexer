@@ -11,22 +11,42 @@ class PuppetLexer(RegexLexer):
 
     tokens = {
         'root': [
+            include('puppet'),
+        ],
+        'puppet': [
             include('comments'),
-            (r'(class)(\s+)([\w:]+)(\s+)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
-            (r'(class|define)(\s+)([\w:]+)(\s*)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation), 'paramlist'),
-            (r'if', Keyword.Reserved, 'conditional'),
-            (r'(\})(\s*)(else)(\s*)(\{)', bygroups(Punctuation, Text, Keyword.Reserved, Text, Punctuation)),
+            (r'(class)(\s+)([\w:]+)(\s+)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation), 'block'),
+            (r'(class|define)(\s+)([\w:]+)(\s*)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation), ('block','paramlist')),
+            (r'elsif', Keyword.Reserved, ('block', 'conditional')),
+            (r'if', Keyword.Reserved, ('block', 'conditional')),
+            (r'unless', Keyword.Reserved, ('block', 'conditional')),
+            (r'(else)(\s*)(\{)', bygroups(Keyword.Reserved, Text, Punctuation), 'block'),
+            (r'case', Keyword.Reserved, ('case', 'conditional')),
             (r'(@{0,2}[\w:]+)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), ('type', 'namevar')),
             (r'\$(::)?(\w+::)*\w+', Name.Variable, 'var_assign'),
             (r'(include)(\s+)', bygroups(Keyword.Namespace, Text), 'include'),
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'function'),
-            (r'\}', Punctuation),
             (r'\s', Text),
+        ],
+        'block': [
+            include('puppet'),
+            (r'\}', Text, '#pop'),
         ],
         'include': [
             (r'[\w:]+', Name.Class),
             include('value'),
             (r'', Text, '#pop'),
+        ],
+        'case': [
+            (r'(default)(:)(\s*)(\{)', bygroups(Keyword.Reserved, Punctuation, Text, Punctuation), 'block'),
+            include('case_values'),
+            (r'(:)(\s*)(\{)', bygroups(Punctuation, Text, Punctuation), 'block'),
+            (r'\s', Text),
+            (r'\}', Punctuation, '#pop'),
+        ],
+        'case_values': [
+            include('value'),
+            (r',', Punctuation),
         ],
         'comments': [
             (r'\s*#.*\n', Comment.Singleline),
@@ -60,8 +80,8 @@ class PuppetLexer(RegexLexer):
             (r'(==|=~|\*|-|\+|<<|>>|!=|!~|!|>=|<=|<|>|and|or|in)', Operator),
         ],
         'conditional': [
-            include('value'),
             include('operators'),
+            include('value'),
             (r'\(', Punctuation, 'conditional'),
             (r'\{', Punctuation, '#pop'),
             (r'\)', Punctuation, '#pop'),
