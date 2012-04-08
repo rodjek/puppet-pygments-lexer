@@ -34,7 +34,8 @@ class PuppetLexer(RegexLexer):
         'node_name': [
             (r'inherits', Keyword.Declaration),
             (r'[\w\.]+', String),
-            include('value'),
+            include('strings'),
+            include('variables'),
             (r',', Punctuation),
             (r'\s', Text),
             (r'\{', Punctuation, '#pop'),
@@ -82,6 +83,7 @@ class PuppetLexer(RegexLexer):
         ],
         'var_assign': [
             include('value'),
+            (r'\[', Punctuation, 'array'),
             (r'(\s*)(=)(\s*)', bygroups(Text, Operator, Text)),
             (r'\s', Text, '#pop'),
             (r'', Text, '#pop'),
@@ -94,7 +96,8 @@ class PuppetLexer(RegexLexer):
         ],
         'conditional': [
             include('operators'),
-            include('value'),
+            include('strings'),
+            include('variables'),
             (r'\[', Punctuation, 'array'),
             (r'\(', Punctuation, 'conditional'),
             (r'\{', Punctuation, '#pop'),
@@ -136,6 +139,7 @@ class PuppetLexer(RegexLexer):
             include('comments'),
             include('booleans'),
             (r'(\s*)(\?)(\s*)(\{)', bygroups(Text, Punctuation, Text, Punctuation), 'selector'),
+            (r'\{', Punctuation, 'hash'),
         ],
         'selector': [
             (r'default', Keyword.Reserved),
@@ -154,8 +158,16 @@ class PuppetLexer(RegexLexer):
         ],
         'array': [
             include('value'),
+            (r'\[', Punctuation, 'array'),
             (r',', Punctuation),
             (r'\s', Text),
             (r'\]', Punctuation, '#pop'),
+        ],
+        'hash': [
+            include('value'),
+            (r'\s', Text),
+            (r'=>', Punctuation),
+            (r',', Punctuation),
+            (r'\}', Punctuation, '#pop'),
         ],
     }
