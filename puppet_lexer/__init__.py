@@ -18,8 +18,14 @@ class PuppetLexer(RegexLexer):
             (r'(\})(\s*)(else)(\s*)(\{)', bygroups(Punctuation, Text, Keyword.Reserved, Text, Punctuation)),
             (r'(@{0,2}[\w:]+)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), ('type', 'namevar')),
             (r'\$(::)?(\w+::)*\w+', Name.Variable, 'var_assign'),
+            (r'(include)(\s+)', bygroups(Keyword.Namespace, Text), 'include'),
             (r'\}', Punctuation),
             (r'\s', Text),
+        ],
+        'include': [
+            (r'[\w:]+', Name.Class),
+            include('value'),
+            (r'', Text, '#pop'),
         ],
         'comments': [
             (r'\s*#.*\n', Comment.Singleline),
