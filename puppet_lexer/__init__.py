@@ -14,6 +14,8 @@ class PuppetLexer(RegexLexer):
             include('comments'),
             (r'(class)(\s+)([\w:]+)(\s+)(\{)', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation)),
             (r'(class|define)(\s+)([\w:]+)(\s*)(\()', bygroups(Keyword.Declaration, Text, Name.Class, Text, Punctuation), 'paramlist'),
+            (r'if', Keyword.Reserved, 'conditional'),
+            (r'(\})(\s*)(else)(\s*)(\{)', bygroups(Punctuation, Text, Keyword.Reserved, Text, Punctuation)),
             (r'(@{0,2}[\w:]+)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), ('type', 'namevar')),
             (r'\$(::)?(\w+::)*\w+', Name.Variable, 'var_assign'),
             (r'\}', Punctuation),
@@ -25,7 +27,6 @@ class PuppetLexer(RegexLexer):
         'strings': [
             (r"'.+'", String.Single),
             (r'\w+', String.Symbol),
-        ],
             (r'"', String.Double, 'dblstring'),
         ],
         'dblstring': [
@@ -34,17 +35,29 @@ class PuppetLexer(RegexLexer):
             (r'[^"\\\$]+', String.Double),
             (r'\$', String.Double),
             (r'"', String.Double, '#pop'),
+        ],
         'variables': [
             (r'\$(::)?(\w+::)*\w+', Name.Variable),
         ],
         'var_assign': [
             include('value'),
-            (r'\s', Text),
-            (r'=', Operator),
+            (r'(\s*)(=)(\s*)', bygroups(Text, Operator, Text)),
+            (r'\s', Text, '#pop'),
             (r'', Text, '#pop'),
         ],
         'booleans': [
             (r'(true|false)', Literal),
+        ],
+        'operators': [
+            (r'(==|!|\*|-|\+|<<|>>|!=|>=|<=|<|>|and|or|in)', Operator),
+        ],
+        'conditional': [
+            include('value'),
+            include('operators'),
+            (r'\(', Punctuation, 'conditional'),
+            (r'\{', Punctuation, '#pop'),
+            (r'\)', Punctuation, '#pop'),
+            (r'\s', Text),
         ],
         'namevar': [
             include('strings'),
