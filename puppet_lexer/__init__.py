@@ -59,14 +59,14 @@ class PuppetLexer(RegexLexer):
         'include': [
             (r'[\w:]+', Name.Class),
             include('value'),
+            (r'\n', Text, '#pop'),
             (r'\s', Text),
-            (r'', Text, '#pop'),
         ],
         'import': [
             (r'[\/\w\.]+', String),
             include('value'),
+            (r'\n', Text, '#pop'),
             (r'\s', Text),
-            (r'', Text, '#pop'),
         ],
         'case': [
             (r'(default)(:)(\s*)(\{)', bygroups(Keyword.Reserved, Punctuation, Text, Punctuation), 'block'),
