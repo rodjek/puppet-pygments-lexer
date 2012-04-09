@@ -149,6 +149,7 @@ class PuppetLexer(RegexLexer):
             (r'=', Punctuation),
             (r',', Punctuation),
             (r'\s', Text),
+            (r'\[', Punctuation, 'array'),
             (r'\)', Punctuation, '#pop'),
         ],
         'type': [
