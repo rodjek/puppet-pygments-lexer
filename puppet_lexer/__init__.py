@@ -101,18 +101,17 @@ class PuppetLexer(RegexLexer):
         'var_assign': [
             (r'\[', Punctuation, ('#pop', 'array')),
             (r'\{', Punctuation, ('#pop', 'hash')),
-            (r'=', Operator),
-            (r'\n', Text, '#pop'),
-            (r'\s', Text),
+            (r'(\s*)(=)(\s*)', bygroups(Text, Operator, Text)),
             (r'(\(|\))', Punctuation),
             include('operators'),
             include('value'),
+            (r'\s', Text, '#pop'),
         ],
         'booleans': [
             (r'(true|false)', Literal),
         ],
         'operators': [
-            (r'(==|=~|\*|-|\+|<<|>>|!=|!~|!|>=|<=|<|>|and|or|in)', Operator),
+            (r'(\s*)(==|=~|\*|-|\+|<<|>>|!=|!~|!|>=|<=|<|>|and|or|in)(\s*)', bygroups(Text, Operator, Text)),
         ],
         'conditional': [
             include('operators'),
@@ -159,6 +158,7 @@ class PuppetLexer(RegexLexer):
             (r'(\w+)(\s*)(=>)(\s*)', bygroups(Name.Tag, Text, Punctuation, Text), 'param_value'),
             (r'\}', Punctuation, '#pop'),
             (r'\s', Text),
+            include('comments'),
             (r'', Text, 'namevar'),
         ],
         'value': [
