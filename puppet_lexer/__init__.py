@@ -57,15 +57,15 @@ class PuppetLexer(RegexLexer):
             (r'\(', Punctuation, 'paramlist'),
         ],
         'include': [
+            (r'\n', Text, '#pop'),
             (r'[\w:]+', Name.Class),
             include('value'),
-            (r'\n', Text, '#pop'),
             (r'\s', Text),
         ],
         'import': [
+            (r'\n', Text, '#pop'),
             (r'[\/\w\.]+', String),
             include('value'),
-            (r'\n', Text, '#pop'),
             (r'\s', Text),
         ],
         'case': [
