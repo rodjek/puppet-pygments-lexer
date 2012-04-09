@@ -99,11 +99,14 @@ class PuppetLexer(RegexLexer):
             (r'\$(::)?(\w+::)*\w+', Name.Variable),
         ],
         'var_assign': [
+            (r'\[', Punctuation, ('#pop', 'array')),
+            (r'\{', Punctuation, ('#pop', 'hash')),
+            (r'=', Operator),
+            (r'\n', Text, '#pop'),
+            (r'\s', Text),
+            (r'(\(|\))', Punctuation),
+            include('operators'),
             include('value'),
-            (r'\[', Punctuation, 'array'),
-            (r'(\s*)(=)(\s*)', bygroups(Text, Operator, Text)),
-            (r'\s', Text, '#pop'),
-            (r'', Text, '#pop'),
         ],
         'booleans': [
             (r'(true|false)', Literal),
@@ -159,6 +162,7 @@ class PuppetLexer(RegexLexer):
             (r'', Text, 'namevar'),
         ],
         'value': [
+            (r'[\d\.]', Number),
             (r'([A-Z][\w:]+)+(\[)', bygroups(Name.Class, Punctuation), 'array'),
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'function'),
             include('strings'),
