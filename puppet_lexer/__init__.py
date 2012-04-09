@@ -21,6 +21,7 @@ class PuppetLexer(RegexLexer):
             (r'case', Keyword.Reserved, ('case', 'conditional')),
             (r'(::)?([A-Z][\w:]+)+(\s*)(<{1,2}\|)', bygroups(Name.Class, Name.Class, Text, Punctuation), 'spaceinvader'),
             (r'(::)?([A-Z][\w:]+)+(\s*)(\{)', bygroups(Name.Class, Name.Class, Text, Punctuation), 'type'),
+            (r'(::)?([A-Z][\w:]+)+(\s*)(\[)', bygroups(Name.Class, Name.Class, Text, Punctuation), ('type', 'override_name')),
             (r'(@{0,2}[\w:]+)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), ('type', 'namevar')),
             (r'\$(::)?(\w+::)*\w+', Name.Variable, 'var_assign'),
             (r'include', Keyword.Namespace, 'include'),
@@ -31,6 +32,13 @@ class PuppetLexer(RegexLexer):
         'block': [
             include('puppet'),
             (r'\}', Text, '#pop'),
+        ],
+        'override_name': [
+            include('strings'),
+            include('variables'),
+            (r'\]', Punctuation),
+            (r'\s', Text),
+            (r'\{', Punctuation, '#pop'),
         ],
         'node_name': [
             (r'inherits', Keyword.Declaration),
