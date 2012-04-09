@@ -20,6 +20,7 @@ class PuppetLexer(RegexLexer):
             (r'(else)(\s*)(\{)', bygroups(Keyword.Reserved, Text, Punctuation), 'block'),
             (r'case', Keyword.Reserved, ('case', 'conditional')),
             (r'(::)?([A-Z][\w:]+)+(\s*)(<{1,2}\|)', bygroups(Name.Class, Name.Class, Text, Punctuation), 'spaceinvader'),
+            (r'(::)?([A-Z][\w:]+)+(\s*)(\{)', bygroups(Name.Class, Name.Class, Text, Punctuation), 'type'),
             (r'(@{0,2}[\w:]+)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), ('type', 'namevar')),
             (r'\$(::)?(\w+::)*\w+', Name.Variable, 'var_assign'),
             (r'(include)(\s+)', bygroups(Keyword.Namespace, Text), 'include'),
