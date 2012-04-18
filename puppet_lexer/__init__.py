@@ -25,7 +25,7 @@ class PuppetLexer(RegexLexer):
             (r'(::)?([A-Z][\w:]+)+(\s*)(\[)', bygroups(Name.Class, Name.Class, Text, Punctuation), ('type', 'override_name')),
             (r'(@{0,2}[\w:]+)(\s*)(\{)(\s*)', bygroups(Name.Class, Text, Punctuation, Text), ('type', 'namevar')),
             (r'\$(::)?(\w+::)*\w+', Name.Variable, 'var_assign'),
-            (r'include', Keyword.Namespace, 'include'),
+            (r'(include|require)', Keyword.Namespace, 'include'),
             (r'import', Keyword.Namespace, 'import'),
             (r'(\w+)(\()', bygroups(Name.Function, Punctuation), 'function'),
             (r'\s', Text),
