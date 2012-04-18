@@ -12,6 +12,7 @@ class PuppetLexer(RegexLexer):
         ],
         'puppet': [
             include('comments'),
+            (r'(class)(\s*)(\{)', bygroups(Name.Class, Text, Punctuation), ('type', 'namevar')),
             (r'(class|define)', Keyword.Declaration, ('block','class_name')),
             (r'node', Keyword.Declaration, ('block', 'node_name')),
             (r'elsif', Keyword.Reserved, ('block', 'conditional')),
