@@ -59,7 +59,7 @@ class PuppetLexer(RegexLexer):
         ],
         'include': [
             (r'\n', Text, '#pop'),
-            (r'[\w:]+', Name.Class),
+            (r'[\w:-]+', Name.Class),
             include('value'),
             (r'\s', Text),
         ],
